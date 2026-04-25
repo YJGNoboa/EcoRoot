@@ -1,12 +1,122 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Dev\\EcoRoot\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1C8B547D-89F4-0F44-8DB1-19BEA2EA8F2D}|backend\\EcoRoot.Infrastructure\\EcoRoot.Infrastructure.csproj|c:\\dev\\ecoroot\\backend\\ecoroot.infrastructure\\data\\ecorootdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C8B547D-89F4-0F44-8DB1-19BEA2EA8F2D}|backend\\EcoRoot.Infrastructure\\EcoRoot.Infrastructure.csproj|solutionrelative:backend\\ecoroot.infrastructure\\data\\ecorootdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D83184DA-09EE-E2E7-DB7F-97B98157008A}|backend\\EcoRoot.Application\\EcoRoot.Application.csproj|c:\\dev\\ecoroot\\backend\\ecoroot.application\\interfaces\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D83184DA-09EE-E2E7-DB7F-97B98157008A}|backend\\EcoRoot.Application\\EcoRoot.Application.csproj|solutionrelative:backend\\ecoroot.application\\interfaces\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8523C1B9-0E30-63FA-F60E-344BF84CCDA0}|frontend\\EcoRoot.BlazorClient\\EcoRoot.BlazorClient.csproj|c:\\dev\\ecoroot\\frontend\\ecoroot.blazorclient\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8523C1B9-0E30-63FA-F60E-344BF84CCDA0}|frontend\\EcoRoot.BlazorClient\\EcoRoot.BlazorClient.csproj|solutionrelative:frontend\\ecoroot.blazorclient\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8523C1B9-0E30-63FA-F60E-344BF84CCDA0}|frontend\\EcoRoot.BlazorClient\\EcoRoot.BlazorClient.csproj|c:\\dev\\ecoroot\\frontend\\ecoroot.blazorclient\\services\\authmessagehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8523C1B9-0E30-63FA-F60E-344BF84CCDA0}|frontend\\EcoRoot.BlazorClient\\EcoRoot.BlazorClient.csproj|solutionrelative:frontend\\ecoroot.blazorclient\\services\\authmessagehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8523C1B9-0E30-63FA-F60E-344BF84CCDA0}|frontend\\EcoRoot.BlazorClient\\EcoRoot.BlazorClient.csproj|c:\\dev\\ecoroot\\frontend\\ecoroot.blazorclient\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8523C1B9-0E30-63FA-F60E-344BF84CCDA0}|frontend\\EcoRoot.BlazorClient\\EcoRoot.BlazorClient.csproj|solutionrelative:frontend\\ecoroot.blazorclient\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8523C1B9-0E30-63FA-F60E-344BF84CCDA0}|frontend\\EcoRoot.BlazorClient\\EcoRoot.BlazorClient.csproj|c:\\dev\\ecoroot\\frontend\\ecoroot.blazorclient\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8523C1B9-0E30-63FA-F60E-344BF84CCDA0}|frontend\\EcoRoot.BlazorClient\\EcoRoot.BlazorClient.csproj|solutionrelative:frontend\\ecoroot.blazorclient\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EcoRootDbContext.cs",
+              "DocumentMoniker": "C:\\Dev\\EcoRoot\\backend\\EcoRoot.Infrastructure\\Data\\EcoRootDbContext.cs",
+              "RelativeDocumentMoniker": "backend\\EcoRoot.Infrastructure\\Data\\EcoRootDbContext.cs",
+              "ToolTip": "C:\\Dev\\EcoRoot\\backend\\EcoRoot.Infrastructure\\Data\\EcoRootDbContext.cs",
+              "RelativeToolTip": "backend\\EcoRoot.Infrastructure\\Data\\EcoRootDbContext.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAwwCkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-25T12:27:33.696Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IRepository.cs",
+              "DocumentMoniker": "C:\\Dev\\EcoRoot\\backend\\EcoRoot.Application\\Interfaces\\IRepository.cs",
+              "RelativeDocumentMoniker": "backend\\EcoRoot.Application\\Interfaces\\IRepository.cs",
+              "ToolTip": "C:\\Dev\\EcoRoot\\backend\\EcoRoot.Application\\Interfaces\\IRepository.cs",
+              "RelativeToolTip": "backend\\EcoRoot.Application\\Interfaces\\IRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-25T12:27:15.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\Dev\\EcoRoot\\frontend\\EcoRoot.BlazorClient\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "frontend\\EcoRoot.BlazorClient\\Services\\AuthService.cs",
+              "ToolTip": "C:\\Dev\\EcoRoot\\frontend\\EcoRoot.BlazorClient\\Services\\AuthService.cs",
+              "RelativeToolTip": "frontend\\EcoRoot.BlazorClient\\Services\\AuthService.cs",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAAAEEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-25T12:26:51.745Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthMessageHandler.cs",
+              "DocumentMoniker": "C:\\Dev\\EcoRoot\\frontend\\EcoRoot.BlazorClient\\Services\\AuthMessageHandler.cs",
+              "RelativeDocumentMoniker": "frontend\\EcoRoot.BlazorClient\\Services\\AuthMessageHandler.cs",
+              "ToolTip": "C:\\Dev\\EcoRoot\\frontend\\EcoRoot.BlazorClient\\Services\\AuthMessageHandler.cs",
+              "RelativeToolTip": "frontend\\EcoRoot.BlazorClient\\Services\\AuthMessageHandler.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-25T12:26:45.902Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Dev\\EcoRoot\\frontend\\EcoRoot.BlazorClient\\Program.cs",
+              "RelativeDocumentMoniker": "frontend\\EcoRoot.BlazorClient\\Program.cs",
+              "ToolTip": "C:\\Dev\\EcoRoot\\frontend\\EcoRoot.BlazorClient\\Program.cs",
+              "RelativeToolTip": "frontend\\EcoRoot.BlazorClient\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-25T12:26:24.769Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "_Imports.razor",
+              "DocumentMoniker": "C:\\Dev\\EcoRoot\\frontend\\EcoRoot.BlazorClient\\_Imports.razor",
+              "RelativeDocumentMoniker": "frontend\\EcoRoot.BlazorClient\\_Imports.razor",
+              "ToolTip": "C:\\Dev\\EcoRoot\\frontend\\EcoRoot.BlazorClient\\_Imports.razor",
+              "RelativeToolTip": "frontend\\EcoRoot.BlazorClient\\_Imports.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-25T12:26:15.763Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

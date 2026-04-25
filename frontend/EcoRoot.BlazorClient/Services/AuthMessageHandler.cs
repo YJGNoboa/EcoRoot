@@ -4,10 +4,7 @@ using System.Net.Http.Headers;
 
 namespace EcoRoot.BlazorClient.Services
 {
-    /// <summary>
-    /// HTTP interceptor that injects the JWT token into every request
-    /// and redirects to login if the API returns 401.
-    /// </summary>
+
     public class AuthMessageHandler : DelegatingHandler
     {
         private readonly AuthService _auth;

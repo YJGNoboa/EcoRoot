@@ -7,7 +7,6 @@ namespace EcoRoot.BlazorClient.Services
 {
     public class AuthService
     {
-        // Public HTTP client (no auth handler) — avoids circular dependency
         private readonly IHttpClientFactory _httpFactory;
         private readonly IJSRuntime _js;
         private const string TokenKey = "ecoroot_token";
@@ -64,7 +63,6 @@ namespace EcoRoot.BlazorClient.Services
 
             try
             {
-                // Decode the JWT payload to verify expiration
                 var payload = token.Split('.')[1];
                 var padded  = payload.PadRight(payload.Length + (4 - payload.Length % 4) % 4, '=');
                 var json    = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(
