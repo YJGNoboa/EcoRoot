@@ -1,0 +1,49 @@
+@inherits LayoutComponentBase
+@inject EcoRoot.BlazorClient.Services.AuthService Auth
+@inject NavigationManager Nav
+
+@if (verifying)
+{
+    <div class="min-vh-100 d-flex align-items-center justify-content-center">
+        <div class="text-center text-success">
+            <div class="spinner-border mb-3" role="status"></div>
+            <p>Verifying session...</p>
+        </div>
+    </div>
+}
+else if (authenticated)
+{
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <nav class="col-md-2 d-none d-md-flex flex-column sidebar py-4 px-2">
+                <NavMenu Username="@username" OnLogout="HandleLogout" />
+            </nav>
+            <main class="col-md-10 px-4 py-4">
+                @Body
+            </main>
+        </div>
+    </div>
+}
+
+@code {
+    private bool verifying = true;
+    private bool authenticated = false;
+    private string? username;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authenticated = await Auth.IsAuthenticatedAsync();
+        if (authenticated)
+            username = await Auth.GetUsernameAsync();
+        else
+            Nav.NavigateTo("/login");
+
+        verifying = false;
+    }
+
+    private async Task HandleLogout()
+    {
+        await Auth.LogoutAsync();
+        Nav.NavigateTo("/login");
+    }
+}

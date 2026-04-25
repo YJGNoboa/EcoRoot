@@ -1,0 +1,158 @@
+@page "/students"
+@inject HttpClient Http
+
+<h2 class="mb-4">Students</h2>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger alert-dismissible">
+        @error
+        <button type="button" class="btn-close" @onclick="() => error = string.Empty"></button>
+    </div>
+}
+
+@if (!showForm)
+{
+    <button class="btn btn-success mb-3" @onclick="ShowCreate">
+        <i class="bi bi-plus-circle me-1"></i> New Student
+    </button>
+
+    @if (items is null)
+    {
+        <div class="d-flex align-items-center gap-2 text-muted">
+            <div class="spinner-border spinner-border-sm"></div> Loading...
+        </div>
+    }
+    else if (!items.Any())
+    {
+        <div class="alert alert-info">No students registered yet.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-success">
+                    <tr>
+                        <th>#</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Grade</th>
+                        <th>Email</th>
+                        <th>Registered</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in items)
+                    {
+                        <tr>
+                            <td class="text-muted small">@s.Id</td>
+                            <td class="fw-semibold">@s.FirstName</td>
+                            <td>@s.LastName</td>
+                            <td><span class="badge bg-secondary">@s.Grade</span></td>
+                            <td class="small text-muted">@(s.Email ?? "—")</td>
+                            <td class="small text-muted">@s.CreatedAt.ToString("MM/dd/yyyy")</td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => ShowEdit(s)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => Delete(s.Id)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+else
+{
+    <div class="card" style="max-width:560px">
+        <div class="card-header bg-success text-white fw-semibold">
+            @(isEditing ? "Edit Student" : "New Student")
+        </div>
+        <div class="card-body">
+            <EditForm Model="form" OnValidSubmit="Save">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name <span class="text-danger">*</span></label>
+                        <InputText class="form-control" @bind-Value="form.FirstName" placeholder="e.g. Mary" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                        <InputText class="form-control" @bind-Value="form.LastName" placeholder="e.g. Johnson" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Grade <span class="text-danger">*</span></label>
+                        <InputText class="form-control" @bind-Value="form.Grade" placeholder="e.g. 5A" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <InputText class="form-control" @bind-Value="form.Email" type="email" placeholder="e.g. mary@school.edu" />
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-1"></i> Save
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">
+                        Cancel
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    private List<StudentResponse>? items;
+    private StudentForm form = new();
+    private bool showForm, isEditing;
+    private int editingId;
+    private string error = string.Empty;
+
+    protected override async Task OnInitializedAsync() => await Load();
+
+    private async Task Load()
+    {
+        try { items = await Http.GetFromJsonAsync<List<StudentResponse>>("api/students"); }
+        catch (Exception ex) { error = $"Error loading: {ex.Message}"; }
+    }
+
+    private void ShowCreate() { form = new(); isEditing = false; showForm = true; error = string.Empty; }
+
+    private void ShowEdit(StudentResponse s)
+    {
+        form = new() { FirstName = s.FirstName, LastName = s.LastName, Grade = s.Grade, Email = s.Email };
+        editingId = s.Id; isEditing = true; showForm = true; error = string.Empty;
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            var res = isEditing
+                ? await Http.PutAsJsonAsync($"api/students/{editingId}", form)
+                : await Http.PostAsJsonAsync("api/students", form);
+
+            if (res.IsSuccessStatusCode) { showForm = false; await Load(); }
+            else error = $"Error saving: {res.StatusCode}";
+        }
+        catch (Exception ex) { error = ex.Message; }
+    }
+
+    private async Task Delete(int id)
+    {
+        try
+        {
+            var res = await Http.DeleteAsync($"api/students/{id}");
+            if (res.IsSuccessStatusCode) await Load();
+            else error = "Could not delete — the student may have associated activities.";
+        }
+        catch (Exception ex) { error = ex.Message; }
+    }
+
+    private void Cancel() { showForm = false; error = string.Empty; }
+}

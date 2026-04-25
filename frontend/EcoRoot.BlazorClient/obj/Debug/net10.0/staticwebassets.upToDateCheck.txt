@@ -1,0 +1,4 @@
+wwwroot\index.html
+wwwroot\css\app.css
+C:\Dev\EcoRoot\frontend\EcoRoot.BlazorClient\wwwroot\index.html
+C:\Dev\EcoRoot\frontend\EcoRoot.BlazorClient\wwwroot\css\app.css

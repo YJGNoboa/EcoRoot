@@ -1,0 +1,156 @@
+@page "/plots"
+@inject HttpClient Http
+
+<h2 class="mb-4">Plots</h2>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger alert-dismissible">
+        @error
+        <button type="button" class="btn-close" @onclick="() => error = string.Empty"></button>
+    </div>
+}
+
+@if (!showForm)
+{
+    <button class="btn btn-success mb-3" @onclick="ShowCreate">
+        <i class="bi bi-plus-circle me-1"></i> New Plot
+    </button>
+
+    @if (items is null)
+    {
+        <div class="d-flex align-items-center gap-2 text-muted">
+            <div class="spinner-border spinner-border-sm"></div> Loading...
+        </div>
+    }
+    else if (!items.Any())
+    {
+        <div class="alert alert-info">No plots registered yet.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-success">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Area (m²)</th>
+                        <th>Location</th>
+                        <th>Description</th>
+                        <th>Created</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in items)
+                    {
+                        <tr>
+                            <td class="text-muted small">@p.Id</td>
+                            <td class="fw-semibold">@p.Name</td>
+                            <td>@p.Area</td>
+                            <td>@p.Location</td>
+                            <td class="text-muted small">@p.Description</td>
+                            <td class="text-muted small">@p.CreatedAt.ToString("MM/dd/yyyy")</td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => ShowEdit(p)" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => Delete(p.Id)" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+else
+{
+    <div class="card" style="max-width:580px">
+        <div class="card-header bg-success text-white fw-semibold">
+            @(isEditing ? "Edit Plot" : "New Plot")
+        </div>
+        <div class="card-body">
+            <EditForm Model="form" OnValidSubmit="Save">
+                <div class="mb-3">
+                    <label class="form-label">Name <span class="text-danger">*</span></label>
+                    <InputText class="form-control" @bind-Value="form.Name" placeholder="e.g. Plot A" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Area (m²) <span class="text-danger">*</span></label>
+                    <InputNumber class="form-control" @bind-Value="form.Area" placeholder="e.g. 12.5" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Location <span class="text-danger">*</span></label>
+                    <InputText class="form-control" @bind-Value="form.Location" placeholder="e.g. North yard" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <InputTextArea class="form-control" @bind-Value="form.Description" rows="3" placeholder="Optional description..." />
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-1"></i> Save
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">
+                        Cancel
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    private List<PlotResponse>? items;
+    private PlotForm form = new();
+    private bool showForm, isEditing;
+    private int editingId;
+    private string error = string.Empty;
+
+    protected override async Task OnInitializedAsync() => await Load();
+
+    private async Task Load()
+    {
+        try { items = await Http.GetFromJsonAsync<List<PlotResponse>>("api/plots"); }
+        catch (Exception ex) { error = $"Error loading: {ex.Message}"; }
+    }
+
+    private void ShowCreate() { form = new(); isEditing = false; showForm = true; error = string.Empty; }
+
+    private void ShowEdit(PlotResponse p)
+    {
+        form = new() { Name = p.Name, Area = p.Area, Location = p.Location, Description = p.Description };
+        editingId = p.Id; isEditing = true; showForm = true; error = string.Empty;
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            var res = isEditing
+                ? await Http.PutAsJsonAsync($"api/plots/{editingId}", form)
+                : await Http.PostAsJsonAsync("api/plots", form);
+
+            if (res.IsSuccessStatusCode) { showForm = false; await Load(); }
+            else error = $"Error saving: {res.StatusCode}";
+        }
+        catch (Exception ex) { error = ex.Message; }
+    }
+
+    private async Task Delete(int id)
+    {
+        try
+        {
+            var res = await Http.DeleteAsync($"api/plots/{id}");
+            if (res.IsSuccessStatusCode) await Load();
+            else error = "Could not delete — the plot may have associated crops.";
+        }
+        catch (Exception ex) { error = ex.Message; }
+    }
+
+    private void Cancel() { showForm = false; error = string.Empty; }
+}

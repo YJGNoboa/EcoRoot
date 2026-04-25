@@ -1,0 +1,200 @@
+@page "/activity-logs"
+@inject HttpClient Http
+
+<h2 class="mb-4">Activity Logs</h2>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger alert-dismissible">
+        @error
+        <button type="button" class="btn-close" @onclick="() => error = string.Empty"></button>
+    </div>
+}
+
+@if (!showForm)
+{
+    <button class="btn btn-success mb-3" @onclick="ShowCreate">
+        <i class="bi bi-plus-circle me-1"></i> Log Activity
+    </button>
+
+    @if (items is null)
+    {
+        <div class="d-flex align-items-center gap-2 text-muted">
+            <div class="spinner-border spinner-border-sm"></div> Loading...
+        </div>
+    }
+    else if (!items.Any())
+    {
+        <div class="alert alert-info">No activity logs registered yet.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-success">
+                    <tr>
+                        <th>#</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Crop</th>
+                        <th>Student</th>
+                        <th>Date</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in items)
+                    {
+                        <tr>
+                            <td class="text-muted small">@a.Id</td>
+                            <td><span class="badge bg-success">@a.ActivityType</span></td>
+                            <td>@a.Description</td>
+                            <td class="small">@a.CropName</td>
+                            <td class="small">@a.StudentName</td>
+                            <td class="small text-muted">@a.ActivityDate.ToString("MM/dd/yyyy")</td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => ShowEdit(a)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => Delete(a.Id)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+else
+{
+    <div class="card" style="max-width:620px">
+        <div class="card-header bg-success text-white fw-semibold">
+            @(isEditing ? "Edit Activity" : "New Activity")
+        </div>
+        <div class="card-body">
+            <EditForm Model="form" OnValidSubmit="Save">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Description <span class="text-danger">*</span></label>
+                        <InputTextArea class="form-control" @bind-Value="form.Description" rows="2"
+                            placeholder="Describe the activity performed..." />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Activity Type <span class="text-danger">*</span></label>
+                        <InputSelect class="form-select" @bind-Value="form.ActivityType">
+                            <option value="">-- Select --</option>
+                            <option value="Irrigation">Irrigation</option>
+                            <option value="Planting">Planting</option>
+                            <option value="Harvesting">Harvesting</option>
+                            <option value="Fertilization">Fertilization</option>
+                            <option value="Pruning">Pruning</option>
+                            <option value="Pest Control">Pest Control</option>
+                            <option value="Monitoring">Monitoring</option>
+                            <option value="Other">Other</option>
+                        </InputSelect>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Date</label>
+                        <InputDate class="form-control" @bind-Value="form.ActivityDate" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Crop <span class="text-danger">*</span></label>
+                        <InputSelect class="form-select" @bind-Value="form.CropId">
+                            <option value="0">-- Select --</option>
+                            @foreach (var c in crops)
+                            {
+                                <option value="@c.Id">@c.Name (@c.PlotName)</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Student <span class="text-danger">*</span></label>
+                        <InputSelect class="form-select" @bind-Value="form.StudentId">
+                            <option value="0">-- Select --</option>
+                            @foreach (var s in students)
+                            {
+                                <option value="@s.Id">@s.FirstName @s.LastName (@s.Grade)</option>
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-1"></i> Save
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">
+                        Cancel
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    private List<ActivityLogResponse>? items;
+    private List<CropResponse> crops = new();
+    private List<StudentResponse> students = new();
+    private ActivityLogForm form = new();
+    private bool showForm, isEditing;
+    private int editingId;
+    private string error = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+        try
+        {
+            crops    = await Http.GetFromJsonAsync<List<CropResponse>>("api/crops") ?? new();
+            students = await Http.GetFromJsonAsync<List<StudentResponse>>("api/students") ?? new();
+        }
+        catch { }
+    }
+
+    private async Task Load()
+    {
+        try { items = await Http.GetFromJsonAsync<List<ActivityLogResponse>>("api/activity-logs"); }
+        catch (Exception ex) { error = $"Error loading: {ex.Message}"; }
+    }
+
+    private void ShowCreate() { form = new(); isEditing = false; showForm = true; error = string.Empty; }
+
+    private void ShowEdit(ActivityLogResponse a)
+    {
+        form = new()
+        {
+            Description = a.Description, ActivityDate = a.ActivityDate,
+            ActivityType = a.ActivityType, CropId = a.CropId, StudentId = a.StudentId
+        };
+        editingId = a.Id; isEditing = true; showForm = true; error = string.Empty;
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            var res = isEditing
+                ? await Http.PutAsJsonAsync($"api/activity-logs/{editingId}", form)
+                : await Http.PostAsJsonAsync("api/activity-logs", form);
+
+            if (res.IsSuccessStatusCode) { showForm = false; await Load(); }
+            else error = $"Error saving: {res.StatusCode}";
+        }
+        catch (Exception ex) { error = ex.Message; }
+    }
+
+    private async Task Delete(int id)
+    {
+        try
+        {
+            var res = await Http.DeleteAsync($"api/activity-logs/{id}");
+            if (res.IsSuccessStatusCode) await Load();
+            else error = $"Error deleting: {res.StatusCode}";
+        }
+        catch (Exception ex) { error = ex.Message; }
+    }
+
+    private void Cancel() { showForm = false; error = string.Empty; }
+}

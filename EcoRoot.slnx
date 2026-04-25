@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="backend/EcoRoot.API/EcoRoot.API.csproj" />
+  <Project Path="backend/EcoRoot.Application/EcoRoot.Application.csproj" />
+  <Project Path="backend/EcoRoot.Domain/EcoRoot.Domain.csproj" />
+  <Project Path="backend/EcoRoot.Infrastructure/EcoRoot.Infrastructure.csproj" />
+  <Project Path="frontend/EcoRoot.BlazorClient/EcoRoot.BlazorClient.csproj" />
+</Solution>

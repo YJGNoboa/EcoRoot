@@ -1,0 +1,124 @@
+@page "/"
+@inject HttpClient Http
+
+<h2 class="mb-4">Dashboard — EcoRoot</h2>
+
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card text-white" style="background:#2d6a4f">
+            <div class="card-body d-flex align-items-center gap-3">
+                <i class="bi bi-grid-3x3-gap fs-1"></i>
+                <div>
+                    <div class="fs-2 fw-bold">@totalPlots</div>
+                    <div class="small opacity-75">Plots</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card text-white" style="background:#40916c">
+            <div class="card-body d-flex align-items-center gap-3">
+                <i class="bi bi-flower2 fs-1"></i>
+                <div>
+                    <div class="fs-2 fw-bold">@totalCrops</div>
+                    <div class="small opacity-75">Active Crops</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card text-white" style="background:#52b788">
+            <div class="card-body d-flex align-items-center gap-3">
+                <i class="bi bi-people fs-1"></i>
+                <div>
+                    <div class="fs-2 fw-bold">@totalStudents</div>
+                    <div class="small opacity-75">Students</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card text-white" style="background:#74c69d">
+            <div class="card-body d-flex align-items-center gap-3">
+                <i class="bi bi-journal-text fs-1"></i>
+                <div>
+                    <div class="fs-2 fw-bold">@totalLogs</div>
+                    <div class="small opacity-75">Activities</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header fw-semibold">Quick Access</div>
+            <div class="card-body d-grid gap-2">
+                <a href="/plots" class="btn btn-outline-success">
+                    <i class="bi bi-plus-circle me-2"></i>New Plot
+                </a>
+                <a href="/crops" class="btn btn-outline-success">
+                    <i class="bi bi-plus-circle me-2"></i>New Crop
+                </a>
+                <a href="/students" class="btn btn-outline-success">
+                    <i class="bi bi-plus-circle me-2"></i>New Student
+                </a>
+                <a href="/activity-logs" class="btn btn-outline-success">
+                    <i class="bi bi-plus-circle me-2"></i>Log Activity
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header fw-semibold">Recent Activities</div>
+            <div class="card-body p-0">
+                @if (recentLogs is null)
+                {
+                    <p class="p-3 text-muted">Loading...</p>
+                }
+                else if (!recentLogs.Any())
+                {
+                    <p class="p-3 text-muted">No activities logged yet.</p>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var a in recentLogs)
+                        {
+                            <li class="list-group-item">
+                                <span class="badge bg-success me-2">@a.ActivityType</span>
+                                <small>@a.CropName — @a.StudentName</small>
+                                <span class="float-end text-muted small">@a.ActivityDate.ToString("MM/dd/yy")</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int totalPlots, totalCrops, totalStudents, totalLogs;
+    private List<ActivityLogResponse>? recentLogs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var plots    = await Http.GetFromJsonAsync<List<PlotResponse>>("api/plots");
+            var crops    = await Http.GetFromJsonAsync<List<CropResponse>>("api/crops");
+            var students = await Http.GetFromJsonAsync<List<StudentResponse>>("api/students");
+            var logs     = await Http.GetFromJsonAsync<List<ActivityLogResponse>>("api/activity-logs");
+
+            totalPlots    = plots?.Count ?? 0;
+            totalCrops    = crops?.Count(c => c.Status == "Active") ?? 0;
+            totalStudents = students?.Count ?? 0;
+            totalLogs     = logs?.Count ?? 0;
+            recentLogs    = logs?.Take(5).ToList();
+        }
+        catch { /* API unavailable */ }
+    }
+}
